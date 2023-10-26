@@ -27,10 +27,6 @@ resource "azurerm_resource_group" "rg-aks" {
   location = var.location
 }
 
-  name     = var.resource_group_name
-  location = var.location
-}
-
 # Sample NSG designed to raise a security alert. Delete for any real deployment.
 resource "azurerm_network_security_group" "nsg-fail" {
   name                = "insecureNSG"
