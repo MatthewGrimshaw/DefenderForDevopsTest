@@ -45,3 +45,19 @@ resource "azurerm_network_security_group" "nsg-fail" {
     destination_address_prefix = "*"
   }
 }
+
+resource "azurerm_storage_account" "storage" {
+  depends_on = [
+    azurerm_resource_group.Management
+  ]
+  name                     = "uncompliantStorageAccount"
+  resource_group_name      = azurerm_resource_group.rg-aks.name
+  location                 = azurerm_resource_group.rg-aks.location
+  account_tier             = "Standard"
+  account_replication_type = "RAGRS"
+  public_network_access_enabled = true
+  access_tier = "Hot"
+  shared_access_key_enabled = true
+}
+
+# https://github.com/tenable/terrascan/blob/master/docs/policies/azure.md
