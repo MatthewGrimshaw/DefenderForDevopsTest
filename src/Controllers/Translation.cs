@@ -53,10 +53,16 @@ namespace AvianTranslator.Controllers
         [HttpGet("en/{englishName}")]
         public string getEnglishTranslation(string englishName)
         {
-            using var con = new SqlConnection(_configuration.GetConnectionString("AvianTranslatorCon"));
-            using var da = new SqlDataAdapter("SELECT * FROM Translation WHERE EnglishName = @EnglishName", con);
-            da.SelectCommand.Parameters.AddWithValue("@EnglishName", englishName);
-            using var dt = new DataTable();
+            // Below mitigates SQL injection
+            //using var con = new SqlConnection(_configuration.GetConnectionString("AvianTranslatorCon"));
+            //using var da = new SqlDataAdapter("SELECT * FROM Translation WHERE EnglishName = @EnglishName", con);
+            //da.SelectCommand.Parameters.AddWithValue("@EnglishName", englishName);
+            //using var dt = new DataTable();
+
+            // BELOW IS NOT MITIGATED AGAINST SQL INJECTION
+            SqlConnection con = new SqlConnection(_configuration.GetConnectionString("AvianTranslatorCon").ToString());
+            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Translation WHERE EnglishName = '" + englishName + "'", con);
+            DataTable dt = new DataTable();
             da.Fill(dt);
             List<Translations> translationList = new List<Translations>();
 
